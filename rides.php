@@ -150,12 +150,6 @@ $statement->execute();
 	</style>
 </head>
 <body>
-<header>
-	<h1 >Welcome <?=$username?>!</h1>
-	<img src="images/logo.jpg">
-	
-</header>
-
 
 <?php if (!isset($_SESSION['admin'])): ?>
 <p>
