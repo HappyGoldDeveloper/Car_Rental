@@ -45,7 +45,7 @@ $image = "";
 </head>
 <body>
 	<header>
-		<h1>Rent a Vehicle</h1>
+		<h1>Rent a Vehicle?</h1>
 		<h1><?=$selected_id?></h1>
 		<a href="rides.php">Rides</a>
 	</header>
