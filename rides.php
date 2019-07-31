@@ -127,8 +127,6 @@ $statement->execute();
 	<style type="text/css">
 		#ul li
 		{
-			border-style: solid;
-			border-radius: 20px;
 			margin-top: 20px;
 			list-style-type: none;
 		}
@@ -139,7 +137,7 @@ $statement->execute();
 
 		#pagination
 		{
-			margin-left: 650px;
+			text-align: center;
 		}
 
 		header>h1
@@ -147,89 +145,116 @@ $statement->execute();
 			padding-left: 1100px;
 		}
 
+		#sele
+		{
+			margin-left: 10px;
+		}
+		.list-group-item
+		{
+			width: 200px;
+		}
+		#cat
+		{
+			margin-left: 20px;
+		}
+
 	</style>
 </head>
 <body>
 
-<?php if (!isset($_SESSION['admin'])): ?>
-<p>
-	<a href="login.php">[login]</a>
-</p>
-<?php endif; ?>
+<header>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Faltu Rentals</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-<?php if (isset($_SESSION['admin'])): ?>
-<p>
-	<a href="logout.php">[logout]</a>
-</p>
-
-<?php endif; ?>
-<?php if (!(isset($_SESSION['admin']))): ?>
-	<p><a href="signup.php">Sign up</a></p>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="index.php">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="rides.php">Rides <span class="sr-only">(current)</span></a>
+      </li>
+	<?php if (isset($_SESSION['admin'])): ?>
+		<?php if ($admin == 1): ?>	
+		<li class="nav-item">
+		<a class="nav-link" href="create.php">Manage</a>
+		</li>
+		<?php endif; ?>
 	<?php endif; ?>
 
+      <li class="nav-item">
+        <a class="nav-link" href="contact.php">Contact</a>
+      </li>
+    </ul>
+    	<?php if (!isset($_SESSION['admin'])): ?>
+		<a class="nav-link" href="login.php">Sign In</a>
+	<?php endif; ?>
+	<?php if (isset($_SESSION['admin'])): ?>
+		<a class="nav-link" href="logout.php">Sign Out</a>
+	<?php endif; ?>
+	<?php if (!(isset($_SESSION['admin']))): ?>
+		<a class="nav-link" href="signup.php">Sign up</a>
+	<?php endif; ?>
+
+    <form class="form-inline my-2 my-lg-0" action="searchRides.php" method="POST">
+      <input class="form-control mr-sm-2" type="text" name="searchResult" placeholder="Search">
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+	<select name="category" class="form-control" id="sele">
+		<option value="vehicle" selected="selected">Vehicle Name</option>
+		<option value="make">Make</option>
+	</select>
+    </form>
+  </div>
+</nav>
+</header>
+<hr class="my-4">
+
+<?php
+
+if(isset($_GET['success']))
+{
+	$answer = $_GET['success'];
+
+	if($answer == "yes"){
+	?>
+	<div class="alert alert-success">
+  		<strong>Welcome <?= $_SESSION['username'] ?> </strong>!
+	</div>
+	
+<?php 
+}
+
+
+}
+
+?>
+
 <div>
-	<nav>
-		<ul>
-			<li><a href="index.php">Home</a></li>
-			<li><a href="rides.php">Rides</a></li>
-			<?php if (isset($_SESSION['admin'])): ?>
-			<?php if ($admin == 1): ?>
-			<li><a href="create.php">Add New Ride</a></li>
-				<?php endif; ?>
-			<?php endif; ?>
-			<li><a href="contact.php">Contact</a></li>
-		</ul>
-	</nav>
 <?php if (isset($_SESSION['admin'])): ?>
 <p><a href="rides.php?sortby=carname">Sort By Car Name</a></p>
 <?php endif; ?>
 </div>
-<div>
-	<nav>
-		<ul>
-			<li>
-				<a href="filterRides.php?s=Toyota">Toyota</a>
-			</li>
-			<li>
-				<a href="filterRides.php?s=Acura">Acura</a>
-			</li>
-			<li>
-				<a href="filterRides.php?s=BMW">BMW</a>
-			</li>
-			<li>
-				<a href="filterRides.php?s=Honsda">Honda</a>
-			</li>
-			<li>
-				<a href="filterRides.php?rented=1">Rented</a>
-			</li>
-		</ul>
-	</nav>
+<div id="cat">
+	<h3>Categories</h3>
+	<ul class="list-group">
+	<li class="list-group-item"><a href="filterRides.php?s=Toyota">Toyota</a></li>
+	<li class="list-group-item"><a href="filterRides.php?s=Acura">Acura</a></li>
+	<li class="list-group-item"><a href="filterRides.php?s=BMW">BMW</a></li>
+	<li class="list-group-item"><a href="filterRides.php?s=Honsda">Honda</a></li>
+	<li class="list-group-item"><a href="filterRides.php?rented=1">Rented</a></li>
+	</ul>
 </div>
 <section>
 	<ul id="ul">
 
-<form action="searchRides.php" method="POST">
-<div>
-	<label>Search:</label>
-	<input type="text" name="searchResult" placeholder="Search">
-	<h5><?=$empty?></h5>
-	<input type="submit" name="submit">
-	
-	<select name="category">
-		<option value="vehicle" selected="selected">Vehicle Name</option>
-		<option value="make">Make</option>
-	</select>
-  	<!-- <input type="radio" name="category" value="vehicle" name="vehicle_radio" checked="checked"> 
-	Vehicle Name
-
-	<input type="radio" name="category" value="make" name="make_radio" > Make -->
-
-</div>
 	<div id="pagination">
 	  	<p><?php echo $textline2; ?></p>
 	  	<div id="pagination_controls"><?php echo $paginationCtrls; ?></div>
   	</div>
-</form>
+
 
 	<?php $records = 0; ?>
 	<?php if ($statement->rowCount() != 0):?>
@@ -246,32 +271,30 @@ $statement->execute();
 			<?php $rented = $row['rented']; ?>
 
 <li>
-				<p>
-				<h3>Name :<?=$VehicleName?></h3>
-				</p>
-				<p><span>Year :<?=$Year?> </span></p>
-				<p>
-					Make :<?=$Make?>
-				</p>
-				<p>
-					Rental Amount Per-Week : $<?=$Amount?>
-				</p>
+<hr class="my-4">
+	<p><?php if($imageName == null): ?>
+	<img src="images\noimage.JPG" >
+	<?php else:?>
+	<img src="images\<?=$imageName?>">
+	<?php endif; ?>
+	
+	<p><b>Vehicle Name :</b> <?=$Make?> <?=$VehicleName?></p>
+	<p><b>Year :</b> <?=$Year?> </p>
+	<p><b>Rental Amount Per-Week :</b> $<?=$Amount?></p>
+	</p>
 
-				<?php if($imageName == null): ?>
-				<img src="images\noimage.JPG"><br>
-				<?php else:?>
-				<img src="images\<?=$imageName?>"><br>
-				<?php endif; ?>
+	<?php if($rented == 1): ?>
+	<div class="alert alert-dismissible alert-danger">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<strong>Oh snap!</strong> This vehicle is currently unavailable.
+	</div>
+	<?php endif; ?>
 
-				<?php if($rented == 1): ?>
-				<img id="rented" src="images\rented.jpg">
-				<?php endif; ?>
-
-				<?php if($rented != 1): ?>
-				<?php if ($admin == 1 || $admin == 0): ?>
-				<a href="rent.php?id=<?=$id?>">Rent Vehicle</a><br><br>
-				<?php endif; ?>
-				<?php endif; ?>
+	<?php if($rented != 1): ?>
+	<?php if ($admin == 1 || $admin == 0): ?>
+	<a href="rent.php?id=<?=$id?>">Rent Vehicle</a><br><br>
+	<?php endif; ?>
+	<?php endif; ?>
 
 				<?php if ($admin == 1): ?>
 				<p>
@@ -336,6 +359,7 @@ $statement->execute();
 
 				 <?php endwhile ?>
 				<?php endif;?>
+				<hr class="my-4">
 </li>
 
 		<?php endwhile ?>
